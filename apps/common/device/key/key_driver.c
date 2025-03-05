@@ -32,6 +32,7 @@
 #include "app_main.h"
 #include "apple_dock/iAP.h"
 #include "adapter_app_status.h"
+#include "user_cfg.h"
 
 #define KEY_EVENT_CLICK_ONLY_SUPPORT	1 	//是否支持某些按键只响应单击事件
 
@@ -101,6 +102,44 @@ void wlm_denoise_led(u8 en) // green
         gpio_set_output_value(IO_PORTB_07, 0);
     }else{
         gpio_set_direction(IO_PORTB_07, 1);
+    }
+}
+
+/**
+ * 连接蓝灯常亮
+ * 配对蓝灯快闪
+ * km19_todo 双色灯要修改
+ */
+
+void wlm_connect_tx1_led(u8 en) // blue
+{
+    if(en){
+        gpio_set_direction(TCFG_LED_BLUE_PIN, 0);
+        gpio_set_output_value(TCFG_LED_BLUE_PIN, 1);
+    }else{
+        os_time_dly(10);
+        gpio_set_direction(TCFG_LED_BLUE_PIN, 1);
+        os_time_dly(10);
+        gpio_set_direction(TCFG_LED_BLUE_PIN, 0);
+        gpio_set_output_value(TCFG_LED_BLUE_PIN, 1);
+    }
+}
+/**
+ * 连接蓝灯常亮
+ * 配对蓝灯快闪
+ * km19_todo 双色灯要修改,暂时绿色灯
+ */
+void wlm_connect_tx2_led(u8 en) // blue
+{
+    if(en){
+        gpio_set_direction(TCFG_LED_GREEN_PIN, 0);
+        gpio_set_output_value(TCFG_LED_GREEN_PIN, 1);
+    }else{
+        os_time_dly(10);
+        gpio_set_direction(TCFG_LED_GREEN_PIN, 1);
+        os_time_dly(10);
+        gpio_set_direction(TCFG_LED_GREEN_PIN, 0);
+        gpio_set_output_value(TCFG_LED_GREEN_PIN, 1);
     }
 }
 
@@ -191,6 +230,7 @@ void led_scan(void)
         }
         
         if(app_var.rx_conn_num){
+            //ne_printf("app_var.rx_conn_num=");
             if(app_var.flag_wlm_denoise[0]==0x55){
                 wlm_rx_led(0);
                 wlm_denoise_led(1);
@@ -199,6 +239,14 @@ void led_scan(void)
                 wlm_rx_led(1);
             }
             app_var.wlm_pair_clear = 0;
+            if(app_var.rx_conn_num==1){
+                wlm_connect_tx1_led(1);
+                wlm_connect_tx2_led(0);
+            }else if(app_var.rx_conn_num==2){
+                wlm_connect_tx1_led(1);
+                wlm_connect_tx2_led(1);
+            }
+           // wlm_connect_led(1);
         }else{ // none conn
             wlm_denoise_led(0);
             if(app_var.wlm_pair_clear){
@@ -210,6 +258,8 @@ void led_scan(void)
             }else{
                 wlm_rx_led(flag_500ms);
             }
+            wlm_connect_tx1_led(0);
+            wlm_connect_tx2_led(0);
         }
 
         flag_100ms = 0;
