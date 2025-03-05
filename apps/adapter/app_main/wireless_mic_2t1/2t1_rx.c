@@ -437,7 +437,7 @@ static int master_audio_command_parse(void *priv, u8 *data)
 #endif
 
      if(data[0]==0x66 || data[1]==0x66){
-        ne_printf("app_task_put_key_msg(KEY_MUSIC_PP, 0);");
+        ne_printf("app_task_put_key_msg(KEY_MUSIC_PP, 0);data[0]=0x%x,data[1]=0x%x",data[0],data[1]);
         app_task_put_key_msg(KEY_MUSIC_PP, 0);
         app_var.flag_wlm_denoise[1]=data[0];
     }
@@ -550,9 +550,12 @@ static int adapter_key_event_handler(struct sys_event *event)
         }else{
             app_var.flag_wlm_denoise[0] = 0x66; // denoise dn.
         }
+        // 降噪功能带记忆
+        // 保存降噪等级
         syscfg_write(CFG_USER_WLM_DENOISE_GEAR, app_var.flag_wlm_denoise, 2);
         y_printf("KEY_MUSIC_PP=%x:%d\n", app_var.flag_wlm_denoise[0], app_var.flag_wlm_denoise[1]);
 
+        // 降噪功能同步
         // app_var.flag_wlm_denoise[1] = 2; // default max.
         wireless_mic_client_send_data(0, app_var.flag_wlm_denoise, 2);
         os_time_dly(10);
@@ -879,7 +882,7 @@ static int event_handle_callback(struct sys_event *event)
                     printf("ADAPTER_EVENT_CONNECT_FIRST\n");
                     wireless_conn_status |= BIT(0);
                     gpio_set_direction(TCFG_LED_BLUE_PIN, 0);
-                    gpio_set_output_value(TCFG_LED_BLUE_PIN, 1);
+                    gpio_set_output_value(TCFG_LED_BLUE_PIN, 1);                                     
                 } else if (event->u.dev.value == 1) {
                     printf("ADAPTER_EVENT_CONNECT_SECOND\n");
                     wireless_conn_status |= BIT(1);
@@ -894,7 +897,12 @@ static int event_handle_callback(struct sys_event *event)
                     gpio_set_direction(TCFG_LED_GREEN_PIN, 0);
                     gpio_set_output_value(TCFG_LED_GREEN_PIN, 1);
                 }
-
+                // 降噪功能带记忆
+                syscfg_read(CFG_USER_WLM_DENOISE_GEAR, app_var.flag_wlm_denoise, 2);
+                ne_printf("app_var.flag_wlm_denoise[0]=%d,app_var.flag_wlm_denoise[1]=%d",app_var.flag_wlm_denoise[0],app_var.flag_wlm_denoise[1]);
+                wireless_mic_client_send_data(0, app_var.flag_wlm_denoise, 2);
+                os_time_dly(10);
+                wireless_mic_client_send_data(1, app_var.flag_wlm_denoise, 2);
                 ui_update_status(STATUS_BT_CONN);
                 sys_auto_shut_down_disable();
                 usr_rx_conn_deal();
