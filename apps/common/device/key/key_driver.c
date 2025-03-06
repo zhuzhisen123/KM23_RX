@@ -117,11 +117,7 @@ void wlm_connect_tx1_led(u8 en) // blue
         gpio_set_direction(TCFG_LED_BLUE_PIN, 0);
         gpio_set_output_value(TCFG_LED_BLUE_PIN, 1);
     }else{
-        os_time_dly(10);
         gpio_set_direction(TCFG_LED_BLUE_PIN, 1);
-        os_time_dly(10);
-        gpio_set_direction(TCFG_LED_BLUE_PIN, 0);
-        gpio_set_output_value(TCFG_LED_BLUE_PIN, 1);
     }
 }
 /**
@@ -135,11 +131,7 @@ void wlm_connect_tx2_led(u8 en) // blue
         gpio_set_direction(TCFG_LED_GREEN_PIN, 0);
         gpio_set_output_value(TCFG_LED_GREEN_PIN, 1);
     }else{
-        os_time_dly(10);
         gpio_set_direction(TCFG_LED_GREEN_PIN, 1);
-        os_time_dly(10);
-        gpio_set_direction(TCFG_LED_GREEN_PIN, 0);
-        gpio_set_output_value(TCFG_LED_GREEN_PIN, 1);
     }
 }
 
@@ -185,6 +177,7 @@ extern u8 usr_usb_online;
 extern u8 usr_get_ntc_status();
 void led_scan(void)
 {
+   
 	static u8 led_doble_flag = 0;
 	static u8 led_rb_flash_flag = 0;
     static u8 mono_stereo_cnt = 0;
@@ -209,6 +202,8 @@ void led_scan(void)
 
     static u32 rx_off_cnt[2] = {60*10, 60*10};
     
+   
+
     cnt_10ms++;
     if(!(cnt_10ms%10)){
         flag_100ms = 1;
@@ -224,6 +219,25 @@ void led_scan(void)
         cnt_10ms = 0;
     }
 
+    if(app_var.rx_conn_num==1){
+        wlm_connect_tx1_led(1);
+        if(flag_100ms==1){
+            wlm_connect_tx2_led(1);
+        }else{
+            wlm_connect_tx2_led(0);
+        }
+    }else if(app_var.rx_conn_num==2){
+        wlm_connect_tx1_led(1);
+        wlm_connect_tx2_led(1);
+    }else{
+        if(flag_100ms==1){
+            wlm_connect_tx1_led(1);
+            wlm_connect_tx2_led(1);
+        }else{
+            wlm_connect_tx1_led(0);
+            wlm_connect_tx2_led(0);
+        }
+    }
     if(flag_100ms){
         if(app_var.spk_switch_cnt||app_var.denoise_switch_cnt){
             return ;
@@ -239,13 +253,6 @@ void led_scan(void)
                 wlm_rx_led(1);
             }
             app_var.wlm_pair_clear = 0;
-            if(app_var.rx_conn_num==1){
-                wlm_connect_tx1_led(1);
-                wlm_connect_tx2_led(0);
-            }else if(app_var.rx_conn_num==2){
-                wlm_connect_tx1_led(1);
-                wlm_connect_tx2_led(1);
-            }
            // wlm_connect_led(1);
         }else{ // none conn
             wlm_denoise_led(0);
@@ -258,8 +265,8 @@ void led_scan(void)
             }else{
                 wlm_rx_led(flag_500ms);
             }
-            wlm_connect_tx1_led(0);
-            wlm_connect_tx2_led(0);
+            // wlm_connect_tx1_led(0);
+            // wlm_connect_tx2_led(0);
         }
 
         flag_100ms = 0;
