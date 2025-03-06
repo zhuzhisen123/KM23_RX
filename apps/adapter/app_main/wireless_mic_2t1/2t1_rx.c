@@ -881,21 +881,21 @@ static int event_handle_callback(struct sys_event *event)
                 if (event->u.dev.value == 0) {
                     printf("ADAPTER_EVENT_CONNECT_FIRST\n");
                     wireless_conn_status |= BIT(0);
-                    gpio_set_direction(TCFG_LED_BLUE_PIN, 0);
-                    gpio_set_output_value(TCFG_LED_BLUE_PIN, 1);                                     
+                    // gpio_set_direction(TCFG_LED_BLUE_PIN, 0);
+                    // gpio_set_output_value(TCFG_LED_BLUE_PIN, 1);                                     
                 } else if (event->u.dev.value == 1) {
                     printf("ADAPTER_EVENT_CONNECT_SECOND\n");
                     wireless_conn_status |= BIT(1);
-                    gpio_set_direction(TCFG_LED_GREEN_PIN, 0);
-                    gpio_set_output_value(TCFG_LED_GREEN_PIN, 1);
+                    // gpio_set_direction(TCFG_LED_GREEN_PIN, 0);
+                    // gpio_set_output_value(TCFG_LED_GREEN_PIN, 1);
                 } else if (event->u.dev.value == 2){
                     printf("ADAPTER_EVENT_CONNECT_SECOND ALL\n");
                     wireless_conn_status |= BIT(0);
                     wireless_conn_status |= BIT(1);
-                    gpio_set_direction(TCFG_LED_BLUE_PIN, 0);
-                    gpio_set_output_value(TCFG_LED_BLUE_PIN, 1);
-                    gpio_set_direction(TCFG_LED_GREEN_PIN, 0);
-                    gpio_set_output_value(TCFG_LED_GREEN_PIN, 1);
+                    // gpio_set_direction(TCFG_LED_BLUE_PIN, 0);
+                    // gpio_set_output_value(TCFG_LED_BLUE_PIN, 1);
+                    // gpio_set_direction(TCFG_LED_GREEN_PIN, 0);
+                    // gpio_set_output_value(TCFG_LED_GREEN_PIN, 1);
                 }
                 // 降噪功能带记忆
                 syscfg_read(CFG_USER_WLM_DENOISE_GEAR, app_var.flag_wlm_denoise, 2);
@@ -911,13 +911,13 @@ static int event_handle_callback(struct sys_event *event)
                 if (event->u.dev.value == 0) {
                     printf("ADAPTER_EVENT_DISCONN_FIRST\n");
                     wireless_conn_status &= ~BIT(0);
-                    gpio_set_direction(TCFG_LED_BLUE_PIN, 0);
-                    gpio_set_output_value(TCFG_LED_BLUE_PIN, 0);
+                    // gpio_set_direction(TCFG_LED_BLUE_PIN, 0);
+                    // gpio_set_output_value(TCFG_LED_BLUE_PIN, 0);
                 } else {
                     printf("ADAPTER_EVENT_DISCONN_SECOND\n");
                     wireless_conn_status &= ~BIT(1);
-                    gpio_set_direction(TCFG_LED_GREEN_PIN, 0);
-                    gpio_set_output_value(TCFG_LED_GREEN_PIN, 0);
+                    // gpio_set_direction(TCFG_LED_GREEN_PIN, 0);
+                    // gpio_set_output_value(TCFG_LED_GREEN_PIN, 0);
                 }
                 ui_update_status(STATUS_BT_DISCONN);
                 if (!wireless_conn_status) {
