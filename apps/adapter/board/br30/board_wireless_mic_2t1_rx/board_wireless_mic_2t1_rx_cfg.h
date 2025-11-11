@@ -39,10 +39,10 @@
 
 
 //两发一收支持两个tx分别作为左右声道，需要RXTX都开这个功能
-#define WIRELESS_TX_MIC_STEREO_OUTPUT		DISABLE
+#define WIRELESS_TX_MIC_STEREO_OUTPUT		ENABLE
 #if (WIRELESS_TX_MIC_STEREO_OUTPUT)
 //两发一收立体声自适应，TX不需要电阻区分左右声道，默认第一个连接上为左声道，第二个为右声道
-#define WIRELESS_TX_MIC_STEREO_OUTPUT_AUTO		DISABLE
+#define WIRELESS_TX_MIC_STEREO_OUTPUT_AUTO		ENABLE
 #define WIRELESS_STEREO_OUTPUT_DIFF             ENABLE
 #if (WIRELESS_MIC_RX_OUTPUT_SEL == WIRELESS_MIC_RX_OUTPUT_USB_MIC)
 #define MIC_CHANNEL							2
@@ -59,7 +59,7 @@
 #define TCFG_WIRELESS_RSSI				50//demo板测试50大概对应1米的距离,越大越远
 
 //配对绑定
-#define WIRELESS_PAIR_BONDING			DISABLE
+#define WIRELESS_PAIR_BONDING			ENABLE
 
 //使用PA延长距离,需要硬件添加PA电路,默认使用PC2/PC3
 #define CONFIG_BT_RF_USING_EXTERNAL_PA_EN	DISABLE
@@ -90,7 +90,7 @@
 //*********************************************************************************//
 #define TCFG_UART0_ENABLE					ENABLE_THIS_MOUDLE                     //串口打印模块使能
 #define TCFG_UART0_RX_PORT					NO_CONFIG_PORT                         //串口接收脚配置（用于打印可以选择NO_CONFIG_PORT）
-#define TCFG_UART0_TX_PORT  				IO_PORTC_05                            //串口发送脚配置
+#define TCFG_UART0_TX_PORT  				NO_CONFIG_PORT                            //串口发送脚配置
 #define TCFG_UART0_BAUDRATE  				1000000                                //串口波特率配置
 
 //*********************************************************************************//
@@ -146,8 +146,8 @@
 // #define TCFG_IOKEY_PREV_CONNECT_WAY			ONE_PORT_TO_LOW  //按键一端接低电平一端接IO
 // #define TCFG_IOKEY_PREV_ONE_PORT			IO_PORTB_00
 
-// #define TCFG_IOKEY_NEXT_CONNECT_WAY 		ONE_PORT_TO_LOW  //按键一端接低电平一端接IO
-// #define TCFG_IOKEY_NEXT_ONE_PORT			IO_PORTB_02
+#define TCFG_IOKEY_NEXT_CONNECT_WAY 		ONE_PORT_TO_LOW  //按键一端接低电平一端接IO
+#define TCFG_IOKEY_NEXT_ONE_PORT			IO_PORTB_02
 //*********************************************************************************//
 //                                  NTC配置                                       //
 //*********************************************************************************//
@@ -162,11 +162,11 @@
 //*********************************************************************************//
 //                                  充电参数配置                                   //
 //*********************************************************************************//
-#define TCFG_CHARGE_ENABLE					DISABLE_THIS_MOUDLE
+#define TCFG_CHARGE_ENABLE					ENABLE_THIS_MOUDLE//
 #define TCFG_TEST_BOX_ENABLE				ENABLE_THIS_MOUDLE
 #define TCFG_CHARGESTORE_PORT				IO_PORTP_00
 //是否支持开机充电
-#define TCFG_CHARGE_POWERON_ENABLE			DISABLE
+#define TCFG_CHARGE_POWERON_ENABLE			ENABLE
 //是否支持拔出充电自动开机功能
 #define TCFG_CHARGE_OFF_POWERON_NE			DISABLE
 #define TCFG_CHARGE_FULL_V					CHARGE_FULL_V_4222

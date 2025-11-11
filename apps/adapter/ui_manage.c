@@ -102,6 +102,9 @@ void ui_manage_scan(void *priv)
         case STATUS_CHARGE_FULL:
             log_info("[STATUS_CHARGE_FULL]\n");
             pwm_led_mode_set(p_led->charge_full);
+            if(new_handle.poweroff_charge_flag==1){
+                new_handle.charge_full_flag = 1;
+            }
             return;
 
         case STATUS_CHARGE_ERR:

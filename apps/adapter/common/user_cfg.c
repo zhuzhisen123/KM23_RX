@@ -299,16 +299,11 @@ void cfg_file_parse(u8 idx)
         log_info("mic_ldo_vsel_adjust NULL\n");
     }
 #endif
-
-    ret = syscfg_read(CFG_USER_WLM_DENOISE_GEAR, app_var.flag_wlm_denoise, 2);
     r_printf("CFG_USER_WLM_DENOISE_GEAR=%x:%d:%d\n", app_var.flag_wlm_denoise[0], app_var.flag_wlm_denoise[1], ret);
     if(ret < 0){ // read err
         app_var.flag_wlm_denoise[0] = 0x66;
         app_var.flag_wlm_denoise[1] = 2; // default denoise gear max.
     }
-    wireless_mic_client_send_data(0, app_var.flag_wlm_denoise, 2);
-    os_time_dly(10);
-    wireless_mic_client_send_data(1, app_var.flag_wlm_denoise, 2);
 
     r_printf("CFG_USER_WLM_DENOISE_GEAR1=%x:%d:%d\n", app_var.flag_wlm_denoise[0], app_var.flag_wlm_denoise[1], ret);
     if(app_var.flag_wlm_denoise[0] != 0x55 && app_var.flag_wlm_denoise[0] != 0x66){

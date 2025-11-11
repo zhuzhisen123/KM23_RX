@@ -3,6 +3,7 @@
 #include "adapter_app_status.h"
 #include "app_task.h"
 #include "app_config.h"
+#include "user_cfg.h"
 
 #if TCFG_CHARGE_ENABLE
 //*----------------------------------------------------------------------------*/
@@ -38,9 +39,10 @@ u8 app_charge_key_event_deal(struct sys_event *event)
         printf("KEY POWEROFF_HOLD\n");
         if (flag_poweron) {
 #if TCFG_CHARGE_POWERON_ENABLE
-            if (++key_poweron_cnt >= 15) {
+            if (++key_poweron_cnt >= 5) {
                 printf("power on from charge");
                 key_poweron_cnt = 0;
+                new_handle.charge_poweron = 1;
                 ret = 1;
             }
 #endif
@@ -83,7 +85,8 @@ void app_charge_run(void)
     int msg[32];
 
     idle_app_start();
-
+    new_handle.poweroff_charge_flag = 1;
+    usr_rx_init();
     while (1) {
         app_task_get_msg(msg, ARRAY_SIZE(msg), 1);
 
@@ -106,6 +109,7 @@ void app_charge_run(void)
             break;
         }
     }
+    new_handle.poweroff_charge_flag = 0;
     printf("exit charge_run");
 }
 #endif

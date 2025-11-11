@@ -8,8 +8,11 @@
 #include "update_loader_download.h"
 #include "adapter_media.h"
 #include "audio_config.h"
+#include "user_cfg.h"
 
-
+new_handle_t new_handle = {
+    .adapter_vol_cnt=2,
+};
 extern void setup_arch();
 void clr_wdt(void);
 
@@ -61,27 +64,41 @@ int eSystemConfirmStopStatus(void)
         return 0;
     }
 }
-
-static void check_power_on_key(void)
+extern void ble_module_enable(u8 en);
+void check_power_on_key(void)
 {
     u32 delay_10ms_cnt = 0;
-
+    new_handle.powerkey_check = 1;
     while (1) {
         clr_wdt();
         os_time_dly(1);
 
-        extern u8 get_power_on_status(void);
-        if (get_power_on_status()) {
-            putchar('+');
+       if(gpio_read(IO_PORTB_01)==0){
             delay_10ms_cnt++;
-            if (delay_10ms_cnt > 150) {
+            if(delay_10ms_cnt > 100){
+                new_handle.pair_mode = 1;
+                led_fre_init();
+                led_scan();
+            }
+            if (delay_10ms_cnt > 400) {
+                new_handle.pair_mode = 0;
+                new_handle.powerkey_check = 0;
+                delay_10ms_cnt = 0;
+                clear_bonding_info();
+                ble_module_enable(1);
                 return;
             }
-        } else {
-            putchar('-');
-            delay_10ms_cnt = 0;
-            puts("enter softpoweroff\n");
-            power_set_soft_poweroff();
+        }else{
+            if (delay_10ms_cnt > 100) {
+                new_handle.pair_mode = 1;
+                delay_10ms_cnt = 0;
+                new_handle.powerkey_check = 0;
+                return;
+            }else{
+                delay_10ms_cnt = 0;
+                puts("enter softpoweroff\n");
+                power_set_soft_poweroff();
+            }
         }
     }
 }

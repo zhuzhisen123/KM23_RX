@@ -187,6 +187,8 @@ enum {
     KEY_IR_NUM_8,
     KEY_IR_NUM_9,//中间不允许插入
     //在这里增加元素
+    KEY_USER_VOL_CHANGE,
+    KEY_USER_DENOISE_CHANGE,
     //
     KEY_HID_MODE_SWITCH,
     KEY_HID_TAKE_PICTURE,

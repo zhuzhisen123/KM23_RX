@@ -141,6 +141,7 @@ u8 *syscfg_ptr_read(u16 item_id, u16 *len);
 #define 	CFG_USER_DEFINE_BEGIN		1
 #define     CFG_USER_CHARGE_FULL        5
 #define     CFG_USER_WLM_DENOISE_GEAR   10
+#define     CFG_USER_WLM_VOLUME         11
 
 
 #define 	CFG_USER_DEFINE_END			49

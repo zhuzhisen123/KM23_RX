@@ -142,7 +142,7 @@ static void adapter_dec_dual_jla_close(void)
     local_irq_enable();
     mem_stats();
 }
-static void adapter_dec_dual_jla_set_vol(u32 channel, u8 vol)
+void adapter_dec_dual_jla_set_vol(u32 channel, u8 vol)
 {
     //adapter_wireless_dec_set_vol(__this, channel, vol);
     adapter_audio_stream_set_vol(__this->stream, channel, vol);

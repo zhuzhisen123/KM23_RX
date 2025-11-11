@@ -78,7 +78,6 @@ void app_main()
         app_curr_status = APP_NORMAL_STATUS;
     }
 
-    usr_rx_init();
 #if TCFG_CHARGE_ENABLE
     printf("set_charge_event_flag\n");
 #ifdef CONFIG_CPU_BR28

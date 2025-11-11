@@ -101,7 +101,7 @@ void set_charge_online_flag(u8 flag)
     __this->charge_online_flag = flag;
 }
 
-u8 get_charge_online_flag(void)
+u8 get_charge_online_flag(void)//zzs 充电标志位
 {
     return __this->charge_online_flag;
 }

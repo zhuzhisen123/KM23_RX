@@ -87,6 +87,7 @@ void wlm_rx_led_deinit()
 }
 void wlm_rx_led(u8 en) // blue
 {
+    return;
     if(en){
         gpio_set_direction(IO_PORTB_08, 0);
         gpio_set_output_value(IO_PORTB_08, 0);
@@ -97,6 +98,7 @@ void wlm_rx_led(u8 en) // blue
 
 void wlm_denoise_led(u8 en) // green
 {
+    return;
     if(en){
         gpio_set_direction(IO_PORTB_07, 0);
         gpio_set_output_value(IO_PORTB_07, 0);
@@ -114,10 +116,35 @@ void wlm_denoise_led(u8 en) // green
 void wlm_connect_tx1_led(u8 en) // blue
 {
     if(en){
-        gpio_set_direction(TCFG_LED_BLUE_PIN, 0);
-        gpio_set_output_value(TCFG_LED_BLUE_PIN, 1);
+        if(new_handle.tx1_connect == 0){
+            gpio_set_direction(TCFG_LED_TX1_PIN, 0);
+            gpio_set_output_value(TCFG_LED_TX1_PIN, 0);
+            gpio_set_direction(TCFG_TX1_LED_DENOISE_PIN, 1);
+            gpio_set_direction(TCFG_TX1_LED_MUTE_PIN, 1);
+        }else{
+            if(new_handle.tx1_denoise){
+                gpio_set_direction(TCFG_TX1_LED_DENOISE_PIN, 0);
+                gpio_set_output_value(TCFG_TX1_LED_DENOISE_PIN, 0);
+                gpio_set_direction(TCFG_LED_TX1_PIN, 1);
+                gpio_set_direction(TCFG_TX1_LED_MUTE_PIN, 1);
+            }
+            if(new_handle.tx1_mute){
+                gpio_set_direction(TCFG_TX1_LED_MUTE_PIN, 0);
+                gpio_set_output_value(TCFG_TX1_LED_MUTE_PIN, 0);
+                gpio_set_direction(TCFG_LED_TX1_PIN, 1);
+                gpio_set_direction(TCFG_TX1_LED_DENOISE_PIN, 1);
+            }
+            if(!new_handle.tx1_denoise && !new_handle.tx1_mute){
+                gpio_set_direction(TCFG_LED_TX1_PIN, 0);
+                gpio_set_output_value(TCFG_LED_TX1_PIN, 0);
+                gpio_set_direction(TCFG_TX1_LED_DENOISE_PIN, 1);
+                gpio_set_direction(TCFG_TX1_LED_MUTE_PIN, 1);
+            }
+        }
     }else{
-        gpio_set_direction(TCFG_LED_BLUE_PIN, 1);
+        gpio_set_direction(TCFG_LED_TX1_PIN, 1);
+        gpio_set_direction(TCFG_TX1_LED_DENOISE_PIN, 1);
+        gpio_set_direction(TCFG_TX1_LED_MUTE_PIN, 1);
     }
 }
 /**
@@ -128,10 +155,104 @@ void wlm_connect_tx1_led(u8 en) // blue
 void wlm_connect_tx2_led(u8 en) // blue
 {
     if(en){
-        gpio_set_direction(TCFG_LED_GREEN_PIN, 0);
-        gpio_set_output_value(TCFG_LED_GREEN_PIN, 1);
+        if(new_handle.tx2_connect == 0){
+            gpio_set_direction(TCFG_LED_TX2_PIN, 0);
+            gpio_set_output_value(TCFG_LED_TX2_PIN, 0);
+            gpio_set_direction(TCFG_TX2_LED_DENOISE_PIN, 1);
+            gpio_set_direction(TCFG_TX2_LED_MUTE_PIN, 1);
+        }else{
+            if(new_handle.tx2_denoise){
+                gpio_set_direction(TCFG_TX2_LED_DENOISE_PIN, 0);
+                gpio_set_output_value(TCFG_TX2_LED_DENOISE_PIN, 0);
+                gpio_set_direction(TCFG_LED_TX2_PIN, 1);
+                gpio_set_direction(TCFG_TX2_LED_MUTE_PIN, 1);
+            }
+            if(new_handle.tx2_mute){
+                gpio_set_direction(TCFG_TX2_LED_MUTE_PIN, 0);
+                gpio_set_output_value(TCFG_TX2_LED_MUTE_PIN, 0);
+                gpio_set_direction(TCFG_LED_TX2_PIN, 1);
+                gpio_set_direction(TCFG_TX2_LED_DENOISE_PIN, 1);
+            }
+            if(!new_handle.tx2_denoise && !new_handle.tx2_mute){
+                gpio_set_direction(TCFG_LED_TX2_PIN, 0);
+                gpio_set_output_value(TCFG_LED_TX2_PIN, 0);
+                gpio_set_direction(TCFG_TX2_LED_DENOISE_PIN, 1);
+                gpio_set_direction(TCFG_TX2_LED_MUTE_PIN, 1);
+            }
+        }
     }else{
-        gpio_set_direction(TCFG_LED_GREEN_PIN, 1);
+        gpio_set_direction(TCFG_LED_TX2_PIN, 1);
+        gpio_set_direction(TCFG_TX2_LED_DENOISE_PIN, 1);
+        gpio_set_direction(TCFG_TX2_LED_MUTE_PIN, 1);
+    }
+}
+
+void wlm_volume_led(u8 vol)
+{
+    if(new_handle.channel_sw == 1){
+        switch (vol)
+        {
+            case 0:
+                gpio_set_direction(TCFG_VOLUME_FIRST_PIN, 1);
+                gpio_set_direction(TCFG_VOLUME_SECOND_PIN, 1);
+                gpio_set_direction(TCFG_VOLUME_THIRD_PIN, 1);
+                break;
+            case 1:
+                gpio_set_direction(TCFG_VOLUME_FIRST_PIN, 0);
+                gpio_set_output_value(TCFG_VOLUME_FIRST_PIN, 1);
+                gpio_set_direction(TCFG_VOLUME_SECOND_PIN, 1);
+                gpio_set_direction(TCFG_VOLUME_THIRD_PIN, 1);
+                break;
+            case 2:
+                gpio_set_direction(TCFG_VOLUME_FIRST_PIN, 0);
+                gpio_set_output_value(TCFG_VOLUME_FIRST_PIN, 1);
+                gpio_set_direction(TCFG_VOLUME_SECOND_PIN, 0);
+                gpio_set_output_value(TCFG_VOLUME_SECOND_PIN, 1);
+                gpio_set_direction(TCFG_VOLUME_THIRD_PIN, 1);
+                break;
+            case 3:
+                gpio_set_direction(TCFG_VOLUME_FIRST_PIN, 0);
+                gpio_set_output_value(TCFG_VOLUME_FIRST_PIN, 1);
+                gpio_set_direction(TCFG_VOLUME_SECOND_PIN, 0);
+                gpio_set_output_value(TCFG_VOLUME_SECOND_PIN, 1);
+                gpio_set_direction(TCFG_VOLUME_THIRD_PIN, 0);
+                gpio_set_output_value(TCFG_VOLUME_THIRD_PIN, 1);
+                break;
+            default:
+                break;
+        }
+    }else{
+        switch (vol)
+        {
+            case 0:
+                gpio_set_direction(TCFG_VOLUME_FIRST_PIN, 1);
+                gpio_set_direction(TCFG_VOLUME_SECOND_PIN, 1);
+                gpio_set_direction(TCFG_VOLUME_THIRD_PIN, 1);
+                break;
+            case 1:
+                gpio_set_direction(TCFG_VOLUME_FIRST_PIN, 0);
+                gpio_set_output_value(TCFG_VOLUME_FIRST_PIN, 0);
+                gpio_set_direction(TCFG_VOLUME_SECOND_PIN, 1);
+                gpio_set_direction(TCFG_VOLUME_THIRD_PIN, 1);
+                break;
+            case 2:
+                gpio_set_direction(TCFG_VOLUME_FIRST_PIN, 0);
+                gpio_set_output_value(TCFG_VOLUME_FIRST_PIN, 0);
+                gpio_set_direction(TCFG_VOLUME_SECOND_PIN, 0);
+                gpio_set_output_value(TCFG_VOLUME_SECOND_PIN, 0);
+                gpio_set_direction(TCFG_VOLUME_THIRD_PIN, 1);
+                break;
+            case 3:
+                gpio_set_direction(TCFG_VOLUME_FIRST_PIN, 0);
+                gpio_set_output_value(TCFG_VOLUME_FIRST_PIN, 0);
+                gpio_set_direction(TCFG_VOLUME_SECOND_PIN, 0);
+                gpio_set_output_value(TCFG_VOLUME_SECOND_PIN, 0);
+                gpio_set_direction(TCFG_VOLUME_THIRD_PIN, 0);
+                gpio_set_output_value(TCFG_VOLUME_THIRD_PIN, 0);
+                break;
+            default:
+                break;
+        }
     }
 }
 
@@ -173,6 +294,28 @@ void denoise_led_deal()
     }
 }
 
+void poweroff_charge_led(u8 en)
+{
+    gpio_set_direction(TCFG_VOLUME_FIRST_PIN, 1);
+    gpio_set_direction(TCFG_VOLUME_SECOND_PIN, 1);
+    gpio_set_direction(TCFG_VOLUME_THIRD_PIN, 1);
+    if(en){
+        if(new_handle.charge_full_flag == 1){
+            gpio_set_direction(TCFG_TX1_LED_DENOISE_PIN, 1);
+            gpio_set_direction(TCFG_TX2_LED_DENOISE_PIN, 1);
+        }else{
+            gpio_set_direction(TCFG_TX1_LED_MUTE_PIN, 0);
+            gpio_set_output_value(TCFG_TX1_LED_MUTE_PIN, 0);
+            gpio_set_direction(TCFG_TX2_LED_MUTE_PIN, 0);
+            gpio_set_output_value(TCFG_TX2_LED_MUTE_PIN, 0);
+        }
+    }else{
+        gpio_set_direction(TCFG_TX1_LED_MUTE_PIN, 1);
+        gpio_set_direction(TCFG_TX2_LED_MUTE_PIN, 1);
+    }
+    
+}
+
 extern u8 usr_usb_online;
 extern u8 usr_get_ntc_status();
 void led_scan(void)
@@ -186,6 +329,13 @@ void led_scan(void)
 	static u8 usr_pa_mute_flag = 0xff;
     static u8 check_cnt = 0;
     static u8 usb_det_cnt = 0;
+    static u8 user_vol_rem=0;
+
+    if(user_vol_rem == 0)
+    {
+        int ret = syscfg_read(CFG_USER_WLM_VOLUME, &new_handle.adapter_vol_cnt, 1);
+        user_vol_rem = 1;
+    }
 
     if(app_var.flag_rf_dut){
         wlm_rx_led(1);
@@ -219,26 +369,57 @@ void led_scan(void)
         cnt_10ms = 0;
     }
 
-    if(app_var.rx_conn_num==1){
-        wlm_connect_tx1_led(1);
-        if(flag_100ms==1){
+    if(new_handle.poweroff_charge_flag== 0){
+        wlm_volume_led(new_handle.adapter_vol_cnt);
+
+        if(new_handle.tx1_connect==1 && new_handle.tx2_connect==0){
+            new_handle.tx2_denoise=0;
+            wlm_connect_tx1_led(1);
+            if(flag_1s==1){
+                wlm_connect_tx2_led(1);
+            }else{
+                wlm_connect_tx2_led(0);
+            }
+        }else if(new_handle.tx2_connect==1 && new_handle.tx1_connect==0){
+            new_handle.tx1_denoise=0;
             wlm_connect_tx2_led(1);
-        }else{
-            wlm_connect_tx2_led(0);
-        }
-    }else if(app_var.rx_conn_num==2){
-        wlm_connect_tx1_led(1);
-        wlm_connect_tx2_led(1);
-    }else{
-        if(flag_100ms==1){
+            if(flag_1s==1){
+                wlm_connect_tx1_led(1);
+            }else{
+                wlm_connect_tx1_led(0);
+            }
+        }else if(new_handle.tx1_connect==1 && new_handle.tx2_connect==1){
             wlm_connect_tx1_led(1);
             wlm_connect_tx2_led(1);
         }else{
-            wlm_connect_tx1_led(0);
-            wlm_connect_tx2_led(0);
+            new_handle.tx1_denoise=0;
+            new_handle.tx2_denoise=0;
+            if(new_handle.pair_mode){
+                if(flag_1s==1){
+                    wlm_connect_tx1_led(1);
+                    wlm_connect_tx2_led(1);
+                }else{
+                    wlm_connect_tx1_led(0);
+                    wlm_connect_tx2_led(0);
+                }
+            }else{
+                if(flag_250ms==1){
+                    wlm_connect_tx1_led(1);
+                    wlm_connect_tx2_led(1);
+                }else{
+                    wlm_connect_tx1_led(0);
+                    wlm_connect_tx2_led(0);
+                }
+            }
+        }
+    }else{
+        if(flag_1s==1){
+            poweroff_charge_led(1);
+        }else{
+            poweroff_charge_led(0);
         }
     }
-    if(flag_100ms){
+    /* if(flag_100ms){
         if(app_var.spk_switch_cnt||app_var.denoise_switch_cnt){
             return ;
         }
@@ -270,7 +451,7 @@ void led_scan(void)
         }
 
         flag_100ms = 0;
-    }
+    } */
 }
 
 void led_fre_init(void)

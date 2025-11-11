@@ -448,7 +448,7 @@ int app_charge_event_handler(struct device_event *dev)
         charge_close_deal();
         break;
     case CHARGE_EVENT_CHARGE_FULL:
-        charge_full_deal();
+        // charge_full_deal();
         break;
     case CHARGE_EVENT_LDO5V_KEEP:
 #if NTC_DET_EN

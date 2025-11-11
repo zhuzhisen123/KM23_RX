@@ -9,7 +9,7 @@ copy ..\..\anc_coeff.bin .
 copy ..\..\anc_gains.bin .
 copy ..\..\br30loader.bin .
 
-..\..\isd_download.exe ..\..\isd_config.ini -tonorflash -dev br30 -boot 0x2000 -div8 -wait 300 -uboot ..\..\uboot.boot -app ..\..\app.bin -res cfg_tool.bin p11_code.bin tone.cfg  -uboot_compress  -format all
+..\..\isd_download.exe ..\..\isd_config.ini -tonorflash -dev br30 -boot 0x2000 -div8 -wait 300 -uboot ..\..\uboot.boot -app ..\..\app.bin -res cfg_tool.bin p11_code.bin tone.cfg -key AC690X-6451.key -uboot_compress  -format all
 :: -format all
 ::-reboot 2500
 ::-key AC690X-6451.key

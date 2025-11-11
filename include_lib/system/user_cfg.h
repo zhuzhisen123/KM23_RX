@@ -102,6 +102,24 @@ typedef struct __LRC_CONFIG {
     u8 lrc_change_mode;
 } _GNU_PACKED_ LRC_CONFIG;
 
+typedef struct __NEW_HANDLE {
+    u8 powerkey_flag;
+    u8 pair_mode;
+    u8 tx1_denoise;
+    u8 tx2_denoise;
+    u8 tx1_connect;
+    u8 tx2_connect;
+    u8 tx1_mute;
+    u8 tx2_mute;
+    u8 adapter_vol_cnt;
+    u8 charge_poweron;
+    u8 poweroff_charge_flag;
+    u8 charge_full_flag;
+    u8 powerkey_check;
+    u8 channel_sw;
+    u8 user_rem_val;
+} new_handle_t;
+
 void cfg_file_parse(u8 idx);
 const u8 *bt_get_mac_addr();
 void bt_get_tws_local_addr(u8 *addr);
@@ -118,8 +136,16 @@ extern void bt_update_mac_addr(u8 *addr);
 extern void bt_set_local_name(char *name, u8 len);
 extern void bt_reset_and_get_mac_addr(u8 *addr);
 extern void bt_set_pair_code_en(u8 en);
+extern new_handle_t new_handle;
 
 #define TCFG_LED_RED_BLUE_ON_PIN         (IO_GROUP_NUM * 5 + 5)
-#define TCFG_LED_GREEN_PIN    IO_PORTB_02 
-#define TCFG_LED_BLUE_PIN    IO_PORTB_03
+#define TCFG_LED_TX1_PIN    IO_PORTB_06
+#define TCFG_LED_TX2_PIN    IO_PORTA_02
+#define TCFG_TX1_LED_DENOISE_PIN    IO_PORTB_07
+#define TCFG_TX2_LED_DENOISE_PIN    IO_PORTC_02
+#define TCFG_TX1_LED_MUTE_PIN    IO_PORTB_08
+#define TCFG_TX2_LED_MUTE_PIN    IO_PORTA_01
+#define TCFG_VOLUME_FIRST_PIN    IO_PORTC_05
+#define TCFG_VOLUME_SECOND_PIN   IO_PORTC_04
+#define TCFG_VOLUME_THIRD_PIN    IO_PORTC_03
 #endif

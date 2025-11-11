@@ -1908,7 +1908,7 @@ REGISTER_LP_TARGET(multi_client_target) = {
 };
 
 //模块开关
-void ble_client_module_enable(u8 en)
+void ble_client_module_enable(u8 en)//开关搜索
 {
     log_info("mode_en:%d\n", en);
 
@@ -1940,7 +1940,7 @@ void client_profile_init(void)
 }
 
 
-
+extern void check_power_on_key(void);
 static wlm_param rx_param;
 void wlm_rx_conn_init(const void *param, void *app_rx_cbk, void *reinit_client_work_state_cbk);
 
@@ -2004,6 +2004,14 @@ void bt_multi_client_init(void)
             ble_client_module_enable(0);
         }
     }
+    if(new_handle.charge_poweron== 0){
+        check_power_on_key();
+    }else{
+        new_handle.pair_mode = 1;
+        new_handle.charge_poweron = 0;
+    }
+
+    usr_rx_init();
 #else
     ble_client_module_enable(1);
 #endif

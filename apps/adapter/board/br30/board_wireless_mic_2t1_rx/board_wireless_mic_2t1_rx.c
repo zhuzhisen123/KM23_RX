@@ -257,11 +257,11 @@ const struct iokey_port iokey_list[] = {
     //     .key_value = 1,
     // },
 
-    // {
-    //     .connect_way = TCFG_IOKEY_NEXT_CONNECT_WAY,
-    //     .key_type.one_io.port = TCFG_IOKEY_NEXT_ONE_PORT,
-    //     .key_value = 2,
-    // },
+    {
+        .connect_way = TCFG_IOKEY_NEXT_CONNECT_WAY,
+        .key_type.one_io.port = TCFG_IOKEY_NEXT_ONE_PORT,
+        .key_value = 1,
+    },
 };
 const struct iokey_platform_data iokey_data = {
     .enable = TCFG_IOKEY_ENABLE,                              //是否使能IO按键
@@ -794,7 +794,7 @@ struct port_wakeup ldoin_fall_port = {
 };
 #endif
 const struct wakeup_param wk_param = {
-    // .port[1] = &port0,
+    .port[1] = &port0,
 #if TCFG_CHARGE_ENABLE
     .port[2] = &charge_port,
     .port[3] = &vbat_port,
